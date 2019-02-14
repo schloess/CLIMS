@@ -451,21 +451,20 @@ def update_sealev(datain1,datain2,ntext1,ntext2,nfactext1,nfactext2,nstep,pltype
 @app.callback(dash.dependencies.Output('plot--state', 'children'),
               [dash.dependencies.Input('submit-to-plots', 'n_clicks')],
               [dash.dependencies.State('chunk--slider', 'value'),
-               dash.dependencies.State('input-n1','value'),              
+               dash.dependencies.State('input-n1','value'),
+               dash.dependencies.State('input-n2','value'),
+               dash.dependencies.State('infac-n1','value'),
+               dash.dependencies.State('infac-n2','value'),               
                dash.dependencies.State('drop--experiment1', 'value'),
                dash.dependencies.State('drop--experiment2', 'value'),
                dash.dependencies.State('drop--difference','value')])
-def update_output(n_clicks, nchunkin, nskiptext,ename1,ename2,pltype):
-    nskipin=int(nskiptext)
-    #print nskipin
-    if nskipin>0:
-        ne1=nchunkin+nskipin
-        ne2=nchunkin
-    elif nskipin<=0:
-        ne1=nchunkin
-        ne2=nchunkin-nskipin
-        #print ne1
-        #print ne2
+def update_output(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,pltype):
+    nskipin1=int(nskiptext1)
+    nskipin2=int(nskiptext2)
+    nfac1=int(nfact1)
+    nfac2=int(nfact2)
+    ne1=int(nchunkin-nskipin1/nfac1) 
+    ne2=int(nchunkin-nskipin2/nfac2)         
     if pltype==0:
         textout='Chunk '+str(ne1)+' of '+ename1+' minus Chunk '+str(ne2)+' of '+ename2 
     elif pltype==1:
@@ -484,18 +483,27 @@ def update_output(n_clicks, nchunkin, nskiptext,ename1,ename2,pltype):
               [dash.dependencies.Input('submit-to-plots', 'n_clicks')],
               [dash.dependencies.State('chunk--slider', 'value'),
                dash.dependencies.State('input-n1','value'),
+               dash.dependencies.State('input-n2','value'),
+               dash.dependencies.State('infac-n1','value'),
+               dash.dependencies.State('infac-n2','value'),
                dash.dependencies.State('drop--experiment1', 'value'),
                dash.dependencies.State('drop--experiment2', 'value'), 
                dash.dependencies.State('data--path1','value'),
                dash.dependencies.State('drop--difference','value')])
-def update_NH(n_clicks, nchunkin,nskiptext, ename1,ename2,datapath,pltype):
-    nskipin=int(nskiptext)
-    if nskipin>0:
-        ne1=nchunkin+nskipin
-        ne2=nchunkin
-    elif nskipin<=0:
-        ne1=nchunkin
-        ne2=nchunkin-nskipin
+def update_NH(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,datapath,pltype):
+    nskipin1=int(nskiptext1)
+    nskipin2=int(nskiptext2)
+    nfac1=int(nfact1)
+    nfac2=int(nfact2)
+    ne1=int(nchunkin-nskipin1/nfac1) 
+    ne2=int(nchunkin-nskipin2/nfac2) 
+    #nskipin=int(nskiptext)
+    #if nskipin>0:
+    #    ne1=nchunkin+nskipin
+    #    ne2=nchunkin
+    #elif nskipin<=0:
+    #    ne1=nchunkin
+    #    ne2=nchunkin-nskipin
     if pltype==0:                    
         PNHPATH=datapath+ename1+'/output/psuim_nh/'
         chunk_dirs=os.listdir(PNHPATH)
@@ -653,18 +661,27 @@ def update_NH(n_clicks, nchunkin,nskiptext, ename1,ename2,datapath,pltype):
               [dash.dependencies.Input('submit-to-plots', 'n_clicks')],
               [dash.dependencies.State('chunk--slider', 'value'),
                dash.dependencies.State('input-n1','value'),
+               dash.dependencies.State('input-n2','value'),
+               dash.dependencies.State('infac-n1','value'),
+               dash.dependencies.State('infac-n2','value'),
                dash.dependencies.State('drop--experiment1', 'value'),
                dash.dependencies.State('drop--experiment2', 'value'), 
                dash.dependencies.State('data--path1','value'),
                dash.dependencies.State('drop--difference','value')])
-def update_SH(n_clicks, nchunkin,nskiptext, ename1,ename2,datapath,pltype):
-    nskipin=int(nskiptext)
-    if nskipin>0:
-        ne1=nchunkin
-        ne2=nchunkin-nskipin
-    elif nskipin<=0:
-        ne1=nchunkin+nskipin
-        ne2=nchunkin
+def update_SH(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,datapath,pltype):
+    nskipin1=int(nskiptext1)
+    nskipin2=int(nskiptext2)
+    nfac1=int(nfact1)
+    nfac2=int(nfact2)
+    ne1=int(nchunkin-nskipin1/nfac1) 
+    ne2=int(nchunkin-nskipin2/nfac2) 
+    #nskipin=int(nskiptext)
+    #if nskipin>0:
+    #    ne1=nchunkin+nskipin
+    #    ne2=nchunkin
+    #elif nskipin<=0:
+    #    ne1=nchunkin
+    #    ne2=nchunkin-nskipin
     if pltype==0:                    
         PNHPATH=datapath+ename1+'/output/psuim_sh/'
         chunk_dirs=os.listdir(PNHPATH)
