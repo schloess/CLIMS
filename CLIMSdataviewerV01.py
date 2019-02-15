@@ -458,19 +458,24 @@ def update_sealev(datain1,datain2,ntext1,ntext2,nfactext1,nfactext2,nstep,pltype
                dash.dependencies.State('drop--experiment1', 'value'),
                dash.dependencies.State('drop--experiment2', 'value'),
                dash.dependencies.State('drop--difference','value')])
-def update_output(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,pltype):
-    nskipin1=int(nskiptext1)
-    nskipin2=int(nskiptext2)
-    nfac1=int(nfact1)
-    nfac2=int(nfact2)
-    ne1=int(nchunkin-nskipin1/nfac1) 
-    ne2=int(nchunkin-nskipin2/nfac2)         
+def update_output(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,pltype):        
     if pltype==0:
+        nskipin1=int(nskiptext1)
+        nskipin2=int(nskiptext2)
+        nskipin=nskipin1-nskipin2
+        nfac1=int(nfact1)
+        nfac2=int(nfact2)
+        if nskipin>=0:
+            ne1=nchunkin
+            ne2=int(nchunkin+(nskipin/nfac2))
+        else:
+            ne2=nchunkin
+            ne1=int(nchunkin-(nskipin/nfac1))                  
         textout='Chunk '+str(ne1)+' of '+ename1+' minus Chunk '+str(ne2)+' of '+ename2 
     elif pltype==1:
-        textout='Chunk '+str(ne1)+' of '+ename1
+        textout='Chunk '+str(nchunkin)+' of '+ename1
     elif pltype==2:
-        textout='Chunk '+str(ne2)+' of '+ename2           
+        textout='Chunk '+str(nchunkin)+' of '+ename2           
     return u'''
         Showing {}
     '''.format(textout)
@@ -491,19 +496,20 @@ def update_output(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,
                dash.dependencies.State('data--path1','value'),
                dash.dependencies.State('drop--difference','value')])
 def update_NH(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,datapath,pltype):
-    nskipin1=int(nskiptext1)
-    nskipin2=int(nskiptext2)
-    nfac1=int(nfact1)
-    nfac2=int(nfact2)
-    ne1=int(nchunkin-nskipin1/nfac1) 
-    ne2=int(nchunkin-nskipin2/nfac2) 
-    #nskipin=int(nskiptext)
-    #if nskipin>0:
-    #    ne1=nchunkin+nskipin
-    #    ne2=nchunkin
-    #elif nskipin<=0:
-    #    ne1=nchunkin
-    #    ne2=nchunkin-nskipin
+    # determine chunk numbers:
+    ne1=nchunkin
+    ne2=nchunkin
+    if pltype==0:
+        nskipin1=int(nskiptext1)
+        nskipin2=int(nskiptext2)
+        nskipin=nskipin1-nskipin2
+        nfac1=int(nfact1)
+        nfac2=int(nfact2)
+        if nskipin>=0:
+            ne2=int(nchunkin+(nskipin/nfac2))
+        else:
+            ne1=int(nchunkin-(nskipin/nfac1)) 
+    # now doe the plots:
     if pltype==0:                    
         PNHPATH=datapath+ename1+'/output/psuim_nh/'
         chunk_dirs=os.listdir(PNHPATH)
@@ -669,19 +675,20 @@ def update_NH(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,enam
                dash.dependencies.State('data--path1','value'),
                dash.dependencies.State('drop--difference','value')])
 def update_SH(n_clicks, nchunkin,nskiptext1,nskiptext2,nfact1,nfact2,ename1,ename2,datapath,pltype):
-    nskipin1=int(nskiptext1)
-    nskipin2=int(nskiptext2)
-    nfac1=int(nfact1)
-    nfac2=int(nfact2)
-    ne1=int(nchunkin-nskipin1/nfac1) 
-    ne2=int(nchunkin-nskipin2/nfac2) 
-    #nskipin=int(nskiptext)
-    #if nskipin>0:
-    #    ne1=nchunkin+nskipin
-    #    ne2=nchunkin
-    #elif nskipin<=0:
-    #    ne1=nchunkin
-    #    ne2=nchunkin-nskipin
+    # determine chunk numbers:
+    ne1=nchunkin
+    ne2=nchunkin
+    if pltype==0:
+        nskipin1=int(nskiptext1)
+        nskipin2=int(nskiptext2)
+        nskipin=nskipin1-nskipin2
+        nfac1=int(nfact1)
+        nfac2=int(nfact2)
+        if nskipin>=0:
+            ne2=int(nchunkin+(nskipin/nfac2))
+        else:
+            ne1=int(nchunkin-(nskipin/nfac1)) 
+    # now doe the plots:
     if pltype==0:                    
         PNHPATH=datapath+ename1+'/output/psuim_sh/'
         chunk_dirs=os.listdir(PNHPATH)
